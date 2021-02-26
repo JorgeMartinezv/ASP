@@ -67,41 +67,45 @@ function loadData() {
 
 function detalles(id) {
 	$.ajax({
-		url: SITE_URL + "/Home/VerPersona/",
-		type: "POST",
+		url: SITE_URL + '/Home/DetallesPersona',
+		type: 'POST',
 		data: { Id: id },
 		dataType: 'JSON',
 		beforeSend: function () {
+
 			LoadingOn("Espere...");
 		},
-		success: function (data) {
-			if (data) {
-				LoadingOff();
-				$('#nombre').val(data[0].Nombre);
-				$('#ap_paterno').val(data[0].ApellidoP);
-				$('#ap_materno').val(data[0].ApellidoM);
-				$('#direccion').val(data[0].Direccion);
-				$('#telefono').val(data[0].Telefono);
-				loadData();
-			} else {
-				Error.Log("Error!", "Error controlado");
-				LoadingOff();
-			}
-		},
 		error: function (error) {
-			//Error.Log(error.responseText, "Error, por favor revisa la conexión e inténtalo de nuevo");		
+			//console.log(error);
+			MsgAlerta("Error!", error, 3000, "error");
 			LoadingOff();
+		},
+		success: function (data) {
+			//console.log(data);
+			LoadingOff();
+
+			if (data != "") {
+
+				$("#Nombre").val(data[0].Nombre);
+				$("#ApellidoP").val(data[0].ApellidoP);
+				$("#ApellidoM").val(data[0].ApellidoM);
+				$("#Direccion").val(data[0].Direccion);
+				$("#Telefono").val(data[0].Telefono);
+
+				$('#addUser').addClass('is-active');
+
+			}
 		}
+
 	});
 }
-
-function Mostrar(id) {
+function prepararInfo(id) {
 	let info = {};
-	info.Nombre = $('#nombre').val();
-	info.ApellidoP = $('#apellido_paterno').val();
-	info.ApellidoM = $('#apellido_materno').val();
-	info.Direccion = $('#direccion').val();
-	info.Telefono = $('#telefono').val();
+	info.Nombre = $('#Nombre').val();
+	info.ApellidoP = $('#ApellidoP').val();
+	info.ApellidoM = $('#ApellidoM').val();
+	info.Direccion = $('#Direccion').val();
+	info.Telefono = $('#Telefono').val();
 
 	procede = validarFormulario(info);
 
@@ -172,7 +176,7 @@ function eliminar(id) {
 			//Error.Log(error.responseText, "Error, por favor revisa la conexión e inténtalo de nuevo");		
 			LoadingOff();
 		}
-	});
+	});		
 }
 
 function editar(id) {
