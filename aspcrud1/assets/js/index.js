@@ -99,6 +99,31 @@ function detalles(id) {
 
 	});
 }
+function reactivar(id) {
+	$.ajax({
+		url: SITE_URL + "/Home/ReactivarPersona/",
+		type: "POST",
+		data: { Id: id },
+		dataType: 'JSON',
+		beforeSend: function () {
+			LoadingOn("Espere...");
+		},
+		success: function (data) {
+			if (data) {
+				LoadingOff();
+
+				loadData();
+			} else {
+				Error.Log("Error!", "Error controlado");
+				LoadingOff();
+			}
+		},
+		error: function (error) {
+			//Error.Log(error.responseText, "Error, por favor revisa la conexión e inténtalo de nuevo");		
+			LoadingOff();
+		}
+	});
+}
 function prepararInfo(id) {
 	let info = {};
 	info.Nombre = $('#Nombre').val();
